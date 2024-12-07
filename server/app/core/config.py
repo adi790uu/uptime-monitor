@@ -8,7 +8,7 @@ class Settings(BaseSettings):
     APP_NAME: str
     API_PREFIX: str = "/api"
     HOST_URL: str
-    MONGODB_URL: str
+    DB_URL: str
     SECRET_KEY: str
 
 

@@ -3,6 +3,8 @@ from datetime import datetime, timedelta
 from app.core.auth import hash_password, verify_password
 from app.core.config import settings
 from app.repositories.user import UserRepository
+from app.models.user import User as UserModel
+import uuid
 
 
 class AuthService:
@@ -11,14 +13,18 @@ class AuthService:
 
     async def register(self, username: str, password: str) -> bool:
         hashed_password = hash_password(password)
-        existing_user = await self.user_repo.find_user_by_username(
+        exists, user = await self.user_repo.find_user_by_username(
             username=username,
         )
-        if existing_user:
+        if exists:
             return False
-        await self.user_repo.create_user(
-            {"username": username, "password": hashed_password}
+
+        user = UserModel(
+            uuid=uuid.uuid4(),
+            username=username,
+            hashed_password=hashed_password,
         )
+        await self.user_repo.create_user(user_info=user)
         return True
 
     async def login(self, username: str, password: str):

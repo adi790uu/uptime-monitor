@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends
 from pydantic import BaseModel
-from app.db.dependencies import get_database
+from app.core.deps import get_db
 from app.services.auth import AuthService
 
 router = APIRouter()
@@ -28,7 +28,7 @@ class LoginResponse(BaseModel):
 
 
 @router.get("/users")
-async def get_users(db=Depends(get_database)):
+async def get_users(db=Depends(get_db)):
     users = await db.users.find().to_list(100)
     return users
 
@@ -36,7 +36,7 @@ async def get_users(db=Depends(get_database)):
 @router.post("/register", response_model=RegisterResponse)
 async def register(
     request: RegisterRequest,
-    db=Depends(get_database),
+    db=Depends(get_db),
 ):
     auth_service = AuthService(db)
     result = await auth_service.register(
@@ -58,7 +58,7 @@ async def register(
 @router.post("/login", response_model=LoginResponse)
 async def login(
     request: LoginRequest,
-    db=Depends(get_database),
+    db=Depends(get_db),
 ):
     auth_service = AuthService(db)
     access_token = await auth_service.login(
