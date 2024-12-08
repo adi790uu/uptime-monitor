@@ -1,6 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
-
+from pydantic import UUID4
 from app.models.user import User
 
 
@@ -13,8 +13,16 @@ class UserRepository:
         result = await self.db.execute(stmt)
         user = result.scalars().first()
         if not user:
-            return False, None
-        return True, user
+            return None
+        return user
+
+    async def get_user_by_user_uuid(self, user_uuid: UUID4):
+        stmt = select(User).where(User.uuid == user_uuid)
+        result = await self.db.execute(stmt)
+        user = result.scalar().first()
+        if not user:
+            return None
+        return user
 
     async def create_user(self, user_info: User):
         self.db.add(user_info)
