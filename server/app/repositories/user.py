@@ -19,7 +19,7 @@ class UserRepository:
     async def get_user_by_user_uuid(self, user_uuid: UUID4):
         stmt = select(User).where(User.uuid == user_uuid)
         result = await self.db.execute(stmt)
-        user = result.scalar().first()
+        user = result.scalar()
         if not user:
             return None
         return user

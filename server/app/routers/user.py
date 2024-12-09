@@ -1,17 +1,29 @@
-# from typing import Annotated
-# from fastapi import APIRouter, Depends
-# from app.core.deps import get_db
-# from app.core.auth import get_current_user
-# from server.app.schemas.user_dto import User
-# from server.app.services.user import UserService
-
-# router = APIRouter()
+from typing import Annotated, Optional
+from fastapi import APIRouter, Depends
+from pydantic import BaseModel
+from app.core.auth import get_current_user
+from app.schemas.user_dto import User
+from loguru import logger
 
 
-# @router.get("/me")
-# async def get_user(
-#     db=Depends(get_db),
-#     current_user=Annotated[User, Depends(get_current_user)],
-# ):
-#     user_service = UserService(db)
-#     user = user_service.get_user_by_user_uuid(user_uuid=current_user.uuid)
+router = APIRouter()
+
+
+class Response(BaseModel):
+    message: str
+    success: bool
+    user: Optional[User] = None
+
+
+@router.get("/me", response_model=Response)
+async def get_user(
+    current_user: Annotated[User, Depends(get_current_user)],
+):
+    try:
+        return Response(
+            message="Got user details successfully!",
+            success=True,
+            user=current_user,
+        )
+    except Exception as e:
+        logger.error(f"Some error occurred {e}")

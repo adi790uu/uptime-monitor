@@ -11,8 +11,8 @@ class User(BaseModel):
 
 def user_model_to_dto(user_model: UserModel) -> User:
     return User(
-        uuid=user_model["uuid"],
-        username=user_model["username"],
-        hashed_password=user_model["hashed_password"],
-        is_active=user_model["is_active"],
+        uuid=user_model.uuid,
+        username=user_model.username,
+        hashed_password=user_model.hashed_password,
+        is_active=user_model.is_active,
     )
