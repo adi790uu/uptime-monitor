@@ -69,6 +69,45 @@ const Dashboard = () => {
           </p>
         </div>
 
+        <div
+          className={`mt-8 mb-8 ${
+            isDarkMode ? "bg-gray-800" : "bg-white"
+          } shadow rounded-lg`}
+        >
+          <div className="px-4 py-5 sm:p-6">
+            <h3
+              className={`text-lg leading-6 font-medium ${
+                isDarkMode ? "text-white" : "text-gray-900"
+              }`}
+            >
+              Add a URL to Monitor
+            </h3>
+            <div className="mt-4 flex items-center">
+              <input
+                type="text"
+                placeholder="Enter URL (e.g., https://www.google.com)"
+                value={newUrl}
+                onChange={(e) => setNewUrl(e.target.value)}
+                className={`mr-4 px-4 py-2 border rounded-lg w-full sm:max-w-md ${
+                  isDarkMode
+                    ? "bg-gray-700 text-white border-gray-600"
+                    : "bg-white text-gray-900 border-gray-300"
+                }`}
+              />
+              <button
+                onClick={handleAddUrl}
+                className={`inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm ${
+                  isDarkMode
+                    ? "text-white bg-indigo-600 hover:bg-indigo-700"
+                    : "text-white bg-indigo-500 hover:bg-indigo-600"
+                }`}
+              >
+                <PlusCircle className="h-5 w-5 mr-2" /> Add
+              </button>
+            </div>
+          </div>
+        </div>
+
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {stats.map((stat, index) => (
             <div
@@ -110,45 +149,6 @@ const Dashboard = () => {
               </div>
             </div>
           ))}
-        </div>
-
-        <div
-          className={`mt-8 ${
-            isDarkMode ? "bg-gray-800" : "bg-white"
-          } shadow rounded-lg`}
-        >
-          <div className="px-4 py-5 sm:p-6">
-            <h3
-              className={`text-lg leading-6 font-medium ${
-                isDarkMode ? "text-white" : "text-gray-900"
-              }`}
-            >
-              Add a URL to Monitor
-            </h3>
-            <div className="mt-4 flex items-center">
-              <input
-                type="text"
-                placeholder="Enter URL"
-                value={newUrl}
-                onChange={(e) => setNewUrl(e.target.value)}
-                className={`mr-4 px-4 py-2 border rounded-lg w-full sm:max-w-md ${
-                  isDarkMode
-                    ? "bg-gray-700 text-white border-gray-600"
-                    : "bg-white text-gray-900 border-gray-300"
-                }`}
-              />
-              <button
-                onClick={handleAddUrl}
-                className={`inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm ${
-                  isDarkMode
-                    ? "text-white bg-indigo-600 hover:bg-indigo-700"
-                    : "text-white bg-indigo-500 hover:bg-indigo-600"
-                }`}
-              >
-                <PlusCircle className="h-5 w-5 mr-2" /> Add
-              </button>
-            </div>
-          </div>
         </div>
 
         <div className={`mt-8 rounded-lg p-6`}>
