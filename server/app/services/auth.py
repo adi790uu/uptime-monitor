@@ -5,6 +5,7 @@ from app.core.config import settings
 from app.repositories.user import UserRepository
 from app.models.user import User as UserModel
 import uuid
+from pydantic import UUID4
 
 
 class AuthService:
@@ -13,10 +14,10 @@ class AuthService:
 
     async def register(self, username: str, password: str) -> bool:
         hashed_password = hash_password(password)
-        exists, user = await self.user_repo.find_user_by_username(
+        user = await self.user_repo.find_user_by_username(
             username=username,
         )
-        if exists:
+        if user:
             return False
 
         user = UserModel(
@@ -29,10 +30,10 @@ class AuthService:
 
     async def login(self, username: str, password: str):
         user = await self.user_repo.find_user_by_username(username)
-        if not user or not verify_password(password, user["password"]):
+        if not user or not verify_password(password, user.hashed_password):
             raise ValueError("Invalid credentials")
-        return self._create_token(user["username"])
+        return self._create_token(user.uuid)
 
-    def _create_token(self, email: str):
-        payload = {"sub": email, "exp": datetime.now() + timedelta(hours=1)}
+    def _create_token(self, uuid: UUID4):
+        payload = {"sub": uuid.hex, "exp": datetime.now() + timedelta(hours=1)}
         return jwt.encode(payload, settings.SECRET_KEY, algorithm="HS256")
